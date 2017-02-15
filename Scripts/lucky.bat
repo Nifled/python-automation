@@ -1,0 +1,1 @@
+@py.exe H:\Erick\Documents\Others\python-automation\lucky.py %*
