@@ -9,8 +9,9 @@ class BrickSetSpider(scrapy.Spider):
     follows links until there are no more left.
     """
     name = "brickset_spider"
-    start_urls = ['http://brickset.com/sets/year-2016']
+    start_urls = ['http://brickset.com/sets/year-2016']  # urls where spider will start from
 
+    # Actual parsing process
     def parse(self, response):
         SET_SELECTOR = '.set'
 
@@ -20,6 +21,7 @@ class BrickSetSpider(scrapy.Spider):
             MINIFIGS_SELECTOR = './/dl[dt/text() = "Minifigs"]/dd[2]/a/text()'
             IMG_SELECTOR = 'img ::attr(src)'
 
+            # Grabbing data from selectors, this class will yield data to scrapy cli
             yield {
                 'name': brickset.css(NAME_SELECTOR).extract_first(),
                 'pieces': brickset.xpath(PIECES_SELECTOR).extract_first(),
@@ -32,5 +34,5 @@ class BrickSetSpider(scrapy.Spider):
         if next_page:
             yield scrapy.Request(
                 response.urljoin(next_page),
-                callback=self.parse
+                callback=self.parse  # Tells spider to keep parsing new html responses until no more links exist.
             )
