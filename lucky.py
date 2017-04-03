@@ -12,7 +12,7 @@ print('Googling...')  # Display text while downloading the Google page
 
 # Gets query from command line
 res = requests.get('http://google.com/search?q=' + ' '.join(sys.argv[1:]))
-res.raise_for_status()  #Script stops if request fails.
+res.raise_for_status()  # Script stops if request fails.
 
 # Get search result links page
 soup = bs4.BeautifulSoup(res.text, "html.parser")
