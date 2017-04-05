@@ -1,4 +1,4 @@
-# scraper.py , run using 'scrapy runspider scraper.py'
+# brickset-scraper.py , run using 'scrapy runspider scraper.py'
 import scrapy
 
 
