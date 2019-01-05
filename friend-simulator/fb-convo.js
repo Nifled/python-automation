@@ -4,12 +4,13 @@ const rawdata = fs.readFileSync("dania.json");
 const data = JSON.parse(rawdata);
 
 const messages = data.messages;
+const separated = groupBy(messages, "sender_name");
 
-const a = messages.filter(x => x.sender_name === "Erick Delfin");
-const b = messages.filter(x => x.sender_name === "Dania Alejandra Navarro");
+const a = separated[Object.keys(separated)[0]];
+const b = separated[Object.keys(separated)[1]];
 
-console.log(a.length, "erick");
-console.log(b.length, "dania");
+console.log(a.slice(0, 1));
+console.log(getTotalWords(a, "content"));
 
 // {
 //   "sender_name": "Erick",
@@ -20,3 +21,22 @@ console.log(b.length, "dania");
 
 // Inspiration - https://i.redd.it/23v9czqdj6i01.jpg
 
+// utils
+function groupBy(objectArray, property) {
+  return objectArray.reduce((acc, obj) => {
+    let key = obj[property];
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(obj);
+    return acc;
+  }, {});
+}
+
+function getTotalWords(array, property) {
+  return array.reduce((acc, msg) => {
+    if (!msg.hasOwnProperty(property)) return acc;
+    let words = msg[property].split(" ");
+    return acc + words.length;
+  }, 0);
+}
