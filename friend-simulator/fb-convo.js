@@ -6,11 +6,13 @@ const data = JSON.parse(rawdata);
 const messages = data.messages;
 const separated = groupBy(messages, "sender_name");
 
-const a = separated[Object.keys(separated)[0]];
-const b = separated[Object.keys(separated)[1]];
+const a = separated[Object.keys(separated)[0]]; // person 1
+const b = separated[Object.keys(separated)[1]]; // person 2
 
 // console.log(a.slice(0, 5));
-console.log(groupByDay(a.slice(0, 50), "timestamp_ms"));
+const days = groupByDay(messages, "timestamp_ms");
+
+console.log(Object.keys(days).length);
 
 // {
 //   "sender_name": "Erick",
@@ -36,14 +38,12 @@ function groupBy(array, property) {
 function groupByDay(array, property) {
   return array.reduce((acc, msg) => {
     let date = new Date(msg[property]);
-    date.setHours(0, 0, 0); // Without hr, min, ms
-    // let msDate = date.getTime();
-    let str = date.getFullYear() + "/" + date.getMonth() + "/" + date.getDate();
-    // console.log(str);
-    if (!acc[str]) {
-      acc[str] = [];
+    date.setHours(0, 0, 0, 0); // Without hr, min, ms
+    let msDate = date.getTime();
+    if (!acc[msDate]) {
+      acc[msDate] = [];
     }
-    acc[str].push(msg);
+    acc[msDate].push(msg);
     return acc;
   }, {});
 }
