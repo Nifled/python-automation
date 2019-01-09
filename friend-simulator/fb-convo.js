@@ -10,18 +10,12 @@ const a = separated[Object.keys(separated)[0]]; // person 1
 const b = separated[Object.keys(separated)[1]]; // person 2
 
 // console.log(a.slice(0, 5));
-const days = groupByDay(messages, "timestamp_ms");
 
-console.log(Object.keys(days).length);
-
-// {
-//   "sender_name": "Erick",
-//   "timestamp_ms": 1440381009905,
-//   "content": "Yo digo que si",
-//   "type": "Generic"
-// }
-
-// Inspiration - https://i.redd.it/23v9czqdj6i01.jpg
+// # of days messaged
+const days = groupByDay(a.slice(0, 100), "timestamp_ms");
+console.log(days);
+const max = mostActiveDay(days);
+console.log(new Date(max));
 
 // utils
 function groupBy(array, property) {
@@ -39,11 +33,11 @@ function groupByDay(array, property) {
   return array.reduce((acc, msg) => {
     let date = new Date(msg[property]);
     date.setHours(0, 0, 0, 0); // Without hr, min, ms
-    let msDate = date.getTime();
-    if (!acc[msDate]) {
-      acc[msDate] = [];
+    let timestamp = date.getTime();
+    if (!acc[timestamp]) {
+      acc[timestamp] = [];
     }
-    acc[msDate].push(msg);
+    acc[timestamp].push(msg);
     return acc;
   }, {});
 }
@@ -55,3 +49,15 @@ function getTotalWords(array, property) {
     return acc + words.length;
   }, 0);
 }
+
+// Most messages in one day (most active)
+function mostActiveDay(daysObj) {
+  const days = Object.keys(daysObj);
+  let max = days[0];
+  days.slice(1).forEach(day => {
+    if (daysObj[day].length > daysObj[max].length) max = day;
+  });
+  return parseInt(max); // timestamp for Date object
+}
+
+// Inspiration - https://i.redd.it/23v9czqdj6i01.jpg
